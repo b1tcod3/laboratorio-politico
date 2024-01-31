@@ -2,11 +2,19 @@
 
 namespace App\Console;
 
+use App\Actions\command\UpdateDataUbch;
+use App\Actions\command\UpdateDataComunidad;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
-{
+{    
+    
+    protected $commands = [
+        UpdateDataUbch::class,
+        UpdateDataComunidad::class,
+    ];   
+
     /**
      * Define the application's command schedule.
      */

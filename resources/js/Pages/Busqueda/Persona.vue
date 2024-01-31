@@ -129,7 +129,7 @@ v-model="form.sexo"
 </template>
 
 <script>
-  import Icon from '@/Components/Icon.vue'
+  import Icon from '@/Components/Icon/Icon.vue'
   import InputError from '@/Components/InputError.vue';
   import InputLabel from '@/Components/InputLabel.vue';
   import Layout from '@/Layouts/MainLayout.vue'

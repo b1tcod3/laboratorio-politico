@@ -21,9 +21,9 @@ class GetMunicipios
         ->select(DB::raw('municipios.id,municipios.eje,municipios.circuito,municipios.nombre,
             COUNT(distinct parroquias.id) as parroquias_count,
             count(distinct centro_electorals.id) as centros_electorales_count,
-            SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_ELECTORES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_electores'),
-    )
-        ->groupBy('municipios.id','municipios.nombre','municipios.eje','municipios.circuito')
+            SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_ELECTORES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_electores,
+            SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_COMUNIDADES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_comunidades'),
+    )->groupBy('municipios.id','municipios.nombre','municipios.eje','municipios.circuito')
         ->filter($filters)
         ->sort($order)
         ;
@@ -38,7 +38,8 @@ class GetMunicipios
                 'eje' => $municipio->eje,
                 'parroquias_count' => $municipio->parroquias_count,
                 'centros_electorales_count' => $municipio->centros_electorales_count,
-                'sum_electores' => number_format($municipio->sum_electores,0,',', '.'),
+                'sum_electores' => $municipio->sum_electores,
+               'sum_comunidades' => intval($municipio->sum_comunidades)
             ]);
         }
         else{
@@ -52,7 +53,8 @@ class GetMunicipios
                'eje' => $municipio->eje,
                'parroquias_count' => $municipio->parroquias_count,
                'centros_electorales_count' => $municipio->centros_electorales_count,
-               'sum_electores' => number_format($municipio->sum_electores,0,',', '.'),
+               'sum_electores' => $municipio->sum_electores,
+               'sum_comunidades' => $municipio->sum_comunidades,
            ]);
        }
 

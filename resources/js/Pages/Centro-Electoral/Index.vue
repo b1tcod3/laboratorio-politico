@@ -146,7 +146,7 @@
 
 <script>
   import { Head, Link } from '@inertiajs/vue3'
-  import Icon from '@/Components/Icon.vue'
+  import Icon from '@/Components/Icon/Icon.vue'
   import pickBy from 'lodash/pickBy'
   import Layout from '@/Layouts/MainLayout.vue'
   import throttle from 'lodash/throttle'

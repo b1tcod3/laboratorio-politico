@@ -73,13 +73,33 @@ Route::get('resumen', [\App\Http\Controllers\ResumenController::class, 'index'])
 //
 Route::get('/test', function () {
     
-    dd(\App\Enums\EjeEnum::values());
+    dd(\App\Models\Persona::find(15190934)->miembroPsuv->cargo->nivel->name);
 });
 
 //Estructuras CRUD
 
-Route::get('estructuras/EPR', [\App\Http\Controllers\EstructuraController::class, 'epr'])
-    ->name('estructuras.epr')
+Route::get('estructuras/EPR', [\App\Http\Controllers\EstructuraController::class, 'EPR'])
+    ->name('estructuras.EPR')
+    ->middleware('auth');
+
+Route::get('estructuras/EPM', [\App\Http\Controllers\EstructuraController::class, 'EPM'])
+    ->name('estructuras.EPM')
+    ->middleware('auth');
+
+Route::get('estructuras/EPP', [\App\Http\Controllers\EstructuraController::class, 'EPP'])
+    ->name('estructuras.EPP')
+    ->middleware('auth');
+    
+Route::get('estructuras/UBCH', [\App\Http\Controllers\EstructuraController::class, 'UBCH'])
+    ->name('estructuras.UBCH')
+    ->middleware('auth');
+
+Route::get('estructuras/COMUNIDAD', [\App\Http\Controllers\EstructuraController::class, 'COMUNIDAD'])
+    ->name('estructuras.COMUNIDAD')
+    ->middleware('auth');
+
+Route::get('estructuras/CALLE', [\App\Http\Controllers\EstructuraController::class, 'CALLE'])
+    ->name('estructuras.CALLE')
     ->middleware('auth');
 
 
@@ -87,4 +107,7 @@ Route::get('estructuras/EPR', [\App\Http\Controllers\EstructuraController::class
 //
 Route::apiResources([
     'estructuras_psuv' => \App\Http\Controllers\EstructuraPsuvController::class,
+    'comunidades' => \App\Http\Controllers\ComunidadController::class,
+    'calles' => \App\Http\Controllers\CalleController::class,
+    'votos_calle' => \App\Http\Controllers\VotoCalleController::class,
 ]);

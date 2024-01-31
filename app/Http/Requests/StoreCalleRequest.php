@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCalleRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreCalleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,8 @@ class StoreCalleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => ['required',Rule::unique('calles')->where('comunidad_id', $this->input('comunidad'))],
+            'comunidad' => ['required','exists:comunidads,id']
         ];
     }
 }

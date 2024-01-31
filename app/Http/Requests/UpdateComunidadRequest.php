@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateComunidadRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateComunidadRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,9 +21,10 @@ class UpdateComunidadRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
-    {
+    {   
         return [
-            //
+            'nombre' => ['required',Rule::unique('comunidads')->where('centro_electoral_id', $this->input('centro_electoral'))->ignore($this->comunidade)],
+            'centro_electoral' => ['required','exists:centro_electorals,id']
         ];
     }
 }

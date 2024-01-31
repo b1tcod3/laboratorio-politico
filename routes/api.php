@@ -34,7 +34,7 @@ Route::get('/municipios', function (Request $request) {
 
 Route::get('/get-data-persona/{cedula}', function (Request $request,$cedula) {
 
-    return \App\Models\Persona::find($cedula)?\App\Models\Persona::find($cedula):['status'=>"ok","message"=>"persona no encontrada"];
+    return \App\Models\Persona::with('contacto')->find($cedula)?['status'=>"ok","message"=>\App\Models\Persona::with('contacto')->find($cedula)]:['status'=>"error","message"=>"persona no encontrada"];
         
 })->name('data.persona');
 

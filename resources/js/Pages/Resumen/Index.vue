@@ -22,7 +22,10 @@
 	});
 
   const fields=[{id:1,name_display:'ID',name:'id'},
-  {id:1,name_display:'Nombre',name:'nombre'}
+  {id:1,name_display:'Nombre',name:'nombre'},
+  {id:2,name_display:'Parroquias',name:'parroquias_count'},
+  {id:3,name_display:'Centros Electorales',name:'centros_electorales_count'},
+  {id:4,name_display:'Comunidades',name:'sum_comunidades'},
   ];
 
   const rows = ref(props.municipios.data);
@@ -64,8 +67,9 @@
 			<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 				<Heading title="Resumen General"/>
 				<div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-				<card-icon icon="municipio" :data="resumen.sum_electores" title="Total Municipios" color="blue"/>
-				<card-icon icon="municipio" :data="resumen.sum_electores" title="Total Municipios" color="red"/>
+				<card-icon icon="centro_electoral" :data="resumen.centros_electorales_count" title="Total Centros Electorales" color="red"/>
+        <card-icon icon="electores" :data="resumen.sum_electores" title="Total Electores" color="blue"/>
+        <card-icon icon="comunidades" :data="resumen.sum_comunidades" title="Total Comunidades" color="yellow"/>
 				</div>
 
         <TableSorteable :fields="fields" :rows="rows"

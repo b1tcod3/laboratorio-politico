@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Enums\SexoEnum;
 
 class Persona extends Model
@@ -60,5 +61,14 @@ class Persona extends Model
         }else{
             $query->orderBy('personas.id','asc');
         }
+    }
+
+    public function contacto(): HasOne
+    {
+        return $this->hasOne(Contacto::class);
+    }
+    public function miembroPsuv(): HasOne
+    {
+        return $this->hasOne(EstructuraPsuv::class);
     }
 }

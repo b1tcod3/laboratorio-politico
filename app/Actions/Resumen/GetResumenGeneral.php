@@ -21,14 +21,15 @@ class GetResumenGeneral
                 ->select(DB::raw('COUNT(distinct municipios.id) as municipio_count,
                     COUNT(distinct parroquias.id) as parroquias_count,
                     count(distinct centro_electorals.id) as centros_electorales_count,
-                    SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_ELECTORES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_electores'),
+                    SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_ELECTORES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_electores,
+                    SUM(CASE when data_centro_electorales.tipo='.TipoDataEnum::CANTIDAD_COMUNIDADES->value.' THEN data_centro_electorales.value_numeric ELSE 0 END) as sum_comunidades'),
                     )
                 ->get()
                 ->transform(fn ($resumen) => [
         'sum_electores' => number_format($resumen->sum_electores,0,',', '.'),
         'parroquias_count' => number_format($resumen->parroquias_count,0,',', '.'),
         'centros_electorales_count' => number_format($resumen->centros_electorales_count,0,',', '.'),
-        'municipio_count' => number_format($resumen->municipio_count,0,',', '.')
+        'sum_comunidades' => number_format($resumen->sum_comunidades,0,',', '.')
     ])->first();
 
         return $resumen;

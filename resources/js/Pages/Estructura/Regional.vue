@@ -1,49 +1,55 @@
 <script setup>
 
+  import ButtonSimple from '@/Components/Button/ButtonSimple.vue';
+  import DangerButton from '@/Components/DangerButton.vue';
+  import EstructuraPsuvForm from '@/Pages/Estructura/Partials/EstructuraPsuvForm.vue';
   import Icon from '@/Components/Icon/Icon.vue'
+  import InputError from '@/Components/InputError.vue';
+  import InputLabel from '@/Components/InputLabel.vue';
   import Layout from '@/Layouts/MainLayout.vue';
   import mapValues from 'lodash/mapValues'
+  import Modal from '@/Components/Modal.vue';
   import Pagination from '@/Components/Pagination.vue'
   import pickBy from 'lodash/pickBy'
+  import PrimaryButton from '@/Components/PrimaryButton.vue';
   import SearchFilter from '@/Components/SearchFilter.vue'
+  import SecondaryButton from '@/Components/SecondaryButton.vue';
+  import Swal from 'sweetalert2'
+  import TextInput from '@/Components/TextInput.vue';
   import throttle from 'lodash/throttle'
   import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
   import { Head, Link } from '@inertiajs/vue3'
   import { ref, watch } from 'vue'
-  import { useForm } from '@inertiajs/vue3'
-  import ButtonSimple from '@/Components/Button/ButtonSimple.vue';
-  import DangerButton from '@/Components/DangerButton.vue';
-  import PrimaryButton from '@/Components/PrimaryButton.vue';
-  import InputError from '@/Components/InputError.vue';
-  import InputLabel from '@/Components/InputLabel.vue';
-  import Modal from '@/Components/Modal.vue';
-  import SecondaryButton from '@/Components/SecondaryButton.vue';
-  import TextInput from '@/Components/TextInput.vue';
-  import EstructuraPsuvForm from '@/Pages/Estructura/Partials/EstructuraPsuvForm.vue';
+  import { useForm, router} from '@inertiajs/vue3'
+
 
 
   defineOptions({ layout: Layout })
 
   const loading = ref(false);
   const showModal = ref(false);
+  const miembro = ref(null);
 
   const props = defineProps({
     filters: Object,
     dataSort: Object,
     miembros: Object,
     count_rows: Number,
+    cargos: Object
   });
 
-  const showModalCrud = () => {
+  const showModalCreate = () => {
+    miembro.value = null;
     showModal.value = true;
+};
 
-    //nextTick(() => passwordInput.value.focus());
+const showModalEdit = (m) => {
+    miembro.value = m;
+    showModal.value = true;
 };
 
 const closeModal = () => {
     showModal.value = false;
-
-    //form.reset();
 };
 
   const sexos = [{id:1,name:'F'},
@@ -55,6 +61,7 @@ const closeModal = () => {
         {'id':4,'name_display':'Nombre','name':'nombres'},
         {'id':5,'name_display':'Apellido','name':'apellidos'},
         {'id':6,'name_display':'Sexo','name':'sexo'},
+        {'id':7,'name_display':'Teléfono','name':'telefono_movil'},
 
     ]
 
@@ -84,6 +91,51 @@ const closeModal = () => {
           }
         })
       };
+
+  const deleteMiembro = (miembro) => {
+    
+   const swalDelete = Swal.mixin({
+  buttonsStyling: true
+});
+
+    swalDelete.fire({
+  title: '¿Confirmar Eliminar Miembro? '+miembro.nombres+" "+miembro.apellidos+"("+miembro.cargo_nombre+")",
+  text: "Esta acción no se puede revertir",
+  icon: 'question',
+  showCancelButton: true,
+  confirmButtonText: 'Si. Estoy Seguro',
+  cancelButtonText: 'No. Es un error',
+  reverseButtons: true
+}).then((result) => {
+  if (result.isConfirmed) {
+    swalDelete.fire(
+      'Excelente!',
+      'Miembro Eliminado con éxito',
+      'success'
+    );
+    router.delete(route('estructuras_psuv.destroy',miembro.id),{
+      onSuccess: () => console.log('borrado:'+miembro.name),
+    });
+
+  } else if (
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    swalDelete.fire(
+      'Cancelled',
+      'revisa bien la próxima vez',
+      'error'
+    )
+  }
+})
+
+    // form.put(route('estructuras_psuv.update',{estructuras_psuv:props.miembro.id}), {
+    //     preserveScroll: true,
+    //     onSuccess: () => emit('closeModal'),
+    //     onError: () => form.cedula.focus(),
+    //     onFinish: () => form.cedula.focus(),
+    // });
+};
 
   const toggleOrder = (column) => {
       if(column!=form.orderColumn){
@@ -117,9 +169,9 @@ const closeModal = () => {
 
 <template>
   <div>
-    <Head title="EPM" />
+    <Head title="EPR" />
     <h1 class="mb-8 text-3xl font-bold">Estructura Política Regional</h1>
-    <button-simple @click="showModalCrud" color="blue">
+    <button-simple @click="showModalCreate" color="blue">
                     Nuevo Miembro
     </button-simple>
     <div class="flex items-center justify-between mb-6">
@@ -233,11 +285,21 @@ v-model="form.sexo"
       <td class="px-6 py-4" v-for="field in fields" :key='field.id'>
         {{miembro[field.name]}}
       </td>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 flex items-center ">
         
-        <Link class="flex items-center px-4" :href="`/estructuras_psuv/${miembro['id']}`" tabindex="-1">
+        <Link class="px-4" :href="`/estructuras_psuv/${miembro['id']}`" tabindex="-1">
               <icon name="eye" class="block w-6 h-6 fill-blue-400" />
         </Link>
+        <a class="px-4" href="#" tabindex="-1"
+        @click="showModalEdit(miembro)"
+        >
+              <icon name="edit" class="block w-6 h-6 fill-green-400" />
+        </a>
+        <a class="px-4" href="#" tabindex="-1"
+        @click="deleteMiembro(miembro)"
+        >
+              <icon name="trash" class="block w-6 h-6 fill-red-400" />
+        </a>
       </td>
     </tr>
   </tbody>
@@ -246,7 +308,7 @@ v-model="form.sexo"
 </div>
 
 <Modal :show="showModal" @close="closeModal" >
-       <EstructuraPsuvForm @closeModal="closeModal"/>
+       <EstructuraPsuvForm @closeModal="closeModal" :miembro="miembro" :cargos="cargos"/>
 </Modal>
 
 
