@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use App\Actions\command\UpdateDataUbch;
-use App\Actions\command\UpdateDataComunidad;
+use App\Actions\Command\UpdateDataUbch;
+use App\Actions\Command\UpdateDataComunidad;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

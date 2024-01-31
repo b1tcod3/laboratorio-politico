@@ -42,7 +42,7 @@
     centros_electorales: Array,
     comunidades: Array,
     calles: Array,
-    info_calles: Array,
+    info_calle: Array,
   });
 
   const showModalCreate = () => {
