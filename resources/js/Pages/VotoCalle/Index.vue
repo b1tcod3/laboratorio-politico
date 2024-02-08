@@ -37,8 +37,10 @@
     votos: Object,
     count_rows: Number,
     cargos: Object,
+    tipo_voto: Object,
     municipios: Array,
     parroquias: Array,
+    hora_voto: Object,
     centros_electorales: Array,
     comunidades: Array,
     calles: Array,
@@ -60,14 +62,14 @@ const closeModal = () => {
 };
 
 
-  const fields = [{'id':1,'name_display':'ID','name':'id'},
-        {'id':2,'name_display':'Movilizado Por','name':'cedula'},
-        {'id':3,'name_display':'Telefono de Movilizador','name':'cedula'},
-        {'id':4,'name_display':'Cédula','name':'cedula'},
-        {'id':5,'name_display':'Nombre','name':'nombres'},
-        {'id':6,'name_display':'Apellido','name':'apellidos'},
-        {'id':7,'name_display':'Sexo','name':'sexo'},
-        {'id':8,'name_display':'Teléfono','name':'telefono_movil'}
+  const fields = [{'id':1,'name_display':'Télefono Jefe de Familia','name':'telefono_jefe_familia'},
+        {'id':2,'name_display':'Tipo de Voto','name':'tipo_voto'},
+        {'id':3,'name_display':'Cédula','name':'cedula'},
+        {'id':4,'name_display':'Nombre','name':'nombres'},
+        {'id':5,'name_display':'Apellido','name':'apellidos'},
+        {'id':6,'name_display':'Sexo','name':'sexo'},
+        {'id':7,'name_display':'Teléfono','name':'telefono_movil'},
+        {'id':8,'name_display':'Vota en','name':'ubch'}
     ]
 
   const form = useForm({
@@ -121,11 +123,11 @@ const closeModal = () => {
   if (result.isConfirmed) {
     swalDelete.fire(
       'Excelente!',
-      'Miembro Eliminado con éxito',
+      'Voto Eliminado con éxito',
       'success'
     );
-    router.delete(route('votos_calle.destroy',calle.id),{
-      onSuccess: () => console.log('borrado:'+calle.id),
+    router.delete(route('votos_calle.destroy',voto.id),{
+      onSuccess: () => console.log('borrado:'+voto.id),
     });
 
   } else if (
@@ -267,13 +269,70 @@ const closeModal = () => {
 
   </div>
 
-  <div v-show="info_calle" class="relative overflow-x-auto shadow-md sm:rounded-lg" >
+  <div v-if="info_calle" class="relative overflow-x-auto shadow-md sm:rounded-lg" >
     <button-simple @click="showModalCreate" color="blue">
                     Nuevo Voto
     </button-simple>
+
+    <section class="bg-white dark:bg-gray-900">
+  <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+      <dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+          <div class="flex flex-col items-center justify-center">
+              <dt class="mb-2 text-2xl md:text-2xl font-extrabold">{{info_calle.jefe_calle ?? 'SIN DEFINIR'}}</dt>
+              <dd class="font-light text-gray-500 dark:text-gray-400">Jefe de Calle</dd>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+              <dt class="mb-2 text-2xl md:text-2xl font-extrabold">{{info_calle.telefono ?? 'SIN DEFINIR'}}</dt>
+              <dd class="font-light text-gray-500 dark:text-gray-400">Teléfono</dd>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+              <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{info_calle.total_votos}}</dt>
+              <dd class="font-light text-gray-500 dark:text-gray-400">Votos</dd>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+              <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{info_calle.count_votos_internos}}</dt>
+              <dd class="font-light text-gray-500 dark:text-gray-400">Votos Internos</dd>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+              <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{info_calle.count_votos_externos}}</dt>
+              <dd class="font-light text-gray-500 dark:text-gray-400">Votos Externos</dd>
+          </div>
+      </dl>
+  </div>
+</section>
+
+
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-50 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-50">
         <tr class="bg-indigo-500">
+          <th scope="col" class="px-6 py-3" >
+               <div class="flex items-center uppercase">
+                ID
+                <a href="#" :key="'link-id'" @click="toggleOrder('id')">
+                    <svg class="w-3 h-3 ml-1.5" 
+                    :class="{
+                        'fill-red-500': form.orderColumn=='id'
+                    }"
+                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                    </svg>
+                </a>
+            </div>
+            </th>
+            <th scope="col" class="px-6 py-3" >
+               <div class="flex items-center uppercase">
+                Jefe de Familia
+                <a href="#" :key="'link-id'" @click="toggleOrder('id')">
+                    <svg class="w-3 h-3 ml-1.5" 
+                    :class="{
+                        'fill-red-500': form.orderColumn=='jefe_familia'
+                    }"
+                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                    </svg>
+                </a>
+            </div>
+            </th>
               <th scope="col" class="px-6 py-3" v-for="field in fields" :key='field.id'>
                <div class="flex items-center uppercase">
                 {{field.name_display}}
@@ -288,6 +347,7 @@ const closeModal = () => {
                 </a>
             </div>
             </th>
+            
             <th scope="col" class="px-6 py-3">
               Acciones
             </th>
@@ -305,6 +365,14 @@ const closeModal = () => {
       <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
       v-for="voto in votos.data" :key='voto.id'
       >
+
+      <td class="px-6 py-4">
+        {{voto.id}}
+      </td>
+      <td class="px-6 py-4">
+        {{voto.jefe_familia}}
+      </td>
+
       <td class="px-6 py-4" v-for="field in fields" :key='field.id'>
         {{voto[field.name]}}
       </td>
@@ -314,12 +382,12 @@ const closeModal = () => {
               <icon name="eye" class="block w-6 h-6 fill-blue-400" />
         </Link>
         <a class="px-4" href="#" tabindex="-1"
-        @click="showModalEdit(miembro)"
+        @click="showModalEdit(voto)"
         >
               <icon name="edit" class="block w-6 h-6 fill-green-400" />
         </a>
         <a class="px-4" href="#" tabindex="-1"
-        @click="deleteMiembro(miembro)"
+        @click="deleteVoto(voto)"
         >
               <icon name="trash" class="block w-6 h-6 fill-red-400" />
         </a>
@@ -343,7 +411,7 @@ const closeModal = () => {
 
 <Modal :show="showModal" @close="closeModal" >
        <VotoCalleForm @closeModal="closeModal" :miembro="miembro" :cargos="cargos" :municipios="municipios" :municipio="form.municipio" :parroquias="parroquias" :parroquia="form.parroquia" :centros_electorales="centros_electorales" :centro_electoral="form.centro_electoral" :comunidades="comunidades" :comunidad="form.comunidad"
-       :calles="calles" :calle="form.calle" :voto="form.voto"/>
+       :calles="calles" :calle="form.calle" :voto="voto" :tipo_voto="tipo_voto" :hora_voto="hora_voto"/>
 </Modal>
 
 

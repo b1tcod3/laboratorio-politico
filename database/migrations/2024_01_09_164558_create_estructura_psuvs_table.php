@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->unsignedBigInteger('persona_id')->unique();
+            $table->unsignedBigInteger('persona_id');
             $table->foreign('persona_id')->references('id')->on('personas');
 
             $table->unsignedInteger('cargo_id');
@@ -39,9 +39,14 @@ return new class extends Migration
             $table->boolean('verificado')->nullable();
             $table->boolean('validado')->nullable();
 
-            $table->unique(['cargo_id','centro_electoral_id']);
             $table->unique(['cargo_id','comunidad_id']);
             $table->unique(['cargo_id','calle_id']);
+            $table->unique(['cargo_id','centro_electoral_id']);
+            $table->unique(['persona_id','municipio_id']);
+            $table->unique(['persona_id','parroquia_id']);
+            $table->unique(['persona_id','centro_electoral_id']);
+            $table->unique(['persona_id','comunidad_id']);
+            $table->unique(['persona_id','calle_id']);
 
         });
     }

@@ -38,6 +38,18 @@ Route::get('/get-data-persona/{cedula}', function (Request $request,$cedula) {
         
 })->name('data.persona');
 
+Route::get('/get-data-jefe-familia/{cedula}', function (Request $request,$cedula) {
+
+    $jefe_familia = \App\Models\VotoCalle::where('persona_id',$cedula)->where('es_jefe_familia',1)->first();
+
+    if($jefe_familia){
+        $nombre = $jefe_familia->persona->nombres.' '.$jefe_familia->persona->apellidos;
+    }
+
+    return $jefe_familia?['status'=>"ok","message"=>['nombre'=>$nombre]]:['status'=>"error","message"=>"jefe de familia no encontrado"];
+        
+})->name('data.persona');
+
 Route::get('/parroquias', function (Request $request) {
 	
 	$filters = $request->all('search','municipio','eje');

@@ -26,6 +26,16 @@ class Calle extends Model
         return $this->hasMany(EstructuraPsuv::class,'calle_id');
     }
 
+    public function votos(): HasMany
+    {
+        return $this->hasMany(VotoCalle::class,'calle_id');
+    }
+
+    public function jefe_calle()
+    {
+        return $this->miembros_psuv()->where('cargo_id',80)->first()?$this->miembros_psuv()->where('cargo_id',80)->first()->persona():null;
+    }
+
     // para los votos
     // public function calles(): HasMany
     // {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateVotoCalleRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateVotoCalleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,18 @@ class UpdateVotoCalleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'calle'=> ['required','exists:calles,id'],
+            'telefono_movil' => ['nullable','numeric','digits:11'
+            ],
+            'telefono_movil_aux' => ['nullable','numeric','digits:11'
+            ],
+            'email' => ['nullable','email'],
+            'es_jefe_familia' => ['required','boolean'],
+            'email' => ['nullable','email'],
+            'cedula_jefe_familia' => ['nullable',Rule::exists('voto_calles','persona_id')->where(function (Builder $query) {
+            return $query->where('es_jefe_familia', 1);
+        }),],
+            'tipo_voto' => ['nullable','numeric'],
         ];
     }
 }

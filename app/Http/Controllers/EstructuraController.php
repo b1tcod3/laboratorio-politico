@@ -19,6 +19,7 @@ use Inertia\Inertia;
 class EstructuraController extends Controller
 {
     public function EPR(){
+
     	$count_rows = Request::input('count_rows')??15;
         $filters = Request::all('nombres','personas','sexo','cedula');
 
@@ -43,9 +44,9 @@ class EstructuraController extends Controller
         $count_rows = Request::input('count_rows')??15;
         $filters = Request::all('nombres','personas','municipio','sexo','cedula');
 
-        $miembros = GetMiembrosPsuvMedia::run($filters,NivelCargoEnum::EPM,$count_rows);
-
         $dataSort = Request::all('orderColumn','orderType');
+
+        $miembros = GetMiembrosPsuvMedia::run($filters,NivelCargoEnum::EPM,$dataSort,$count_rows);
 
         $miembros->appends(Request::all());
         
@@ -67,9 +68,9 @@ class EstructuraController extends Controller
         $count_rows = Request::input('count_rows')??15;
         $filters = Request::all('nombres','personas','municipio_parroquia','parroquia','sexo','cedula');
 
-        $miembros = GetMiembrosPsuvMedia::run($filters,NivelCargoEnum::EPP,$count_rows);
-
         $dataSort = Request::all('orderColumn','orderType');
+
+        $miembros = GetMiembrosPsuvMedia::run($filters,NivelCargoEnum::EPP,$dataSort,$count_rows);
 
         $miembros->appends(Request::all());
         

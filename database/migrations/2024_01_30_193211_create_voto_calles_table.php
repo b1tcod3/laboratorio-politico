@@ -14,21 +14,20 @@ return new class extends Migration
         Schema::create('voto_calles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedTinyInteger('tipo');
-            $table->unsignedTinyInteger('hora_votacion');
+            $table->unsignedTinyInteger('tipo')->nullable();
+            $table->unsignedTinyInteger('hora_votacion')->nullable();
+            $table->boolean('es_jefe_familia')->default(false);
             $table->boolean('verificado')->nullable();
             $table->boolean('validado')->nullable();
 
-            $table->unsignedInteger('calle_id')->nullable();
+            $table->unsignedInteger('calle_id');
             $table->foreign('calle_id')->references('id')->on('calles');
 
             $table->unsignedBigInteger('persona_id')->unique();
             $table->foreign('persona_id')->references('id')->on('personas');
 
-            $table->unsignedBigInteger('movilizado_por_id')->unique();
-            $table->foreign('movilizado_por_id')->references('id')->on('personas');
-
-            $table->unique(['persona_id','calle_id']);
+            $table->unsignedBigInteger('jefe_familia_id')->nullable();
+            $table->foreign('jefe_familia_id')->references('id')->on('personas');
         });
     }
 

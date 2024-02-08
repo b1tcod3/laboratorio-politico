@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\VotoCalle\GetVotoCalle;
+use App\Actions\Calle\InfoCalle;
+use App\Actions\VotoCalle\CreateVotoCalle;
+use App\Actions\VotoCalle\UpdateVotoCalle;
+use App\Enums\TipoVotoEnum;
+use App\Enums\HoraVotoEnum;
 use App\Http\Requests\StoreVotoCalleRequest;
 use App\Http\Requests\UpdateVotoCalleRequest;
 use App\Models\Calle;
@@ -30,7 +35,7 @@ class VotoCalleController extends Controller
 
         $votos->appends(Request::all());
         
-        $info_calle = Calle::find($filters['calle']);
+        $info_calle = InfoCalle::run($filters['calle']);
 
         $calles = Calle::join('comunidads', 'comunidads.id', '=', 'calles.comunidad_id')->select('comunidads.id as comunidad_id','calles.id')
             ->selectRaw('calles.nombre as calle_nombre')->
@@ -59,6 +64,8 @@ class VotoCalleController extends Controller
             'parroquias' => $parroquias,
             'comunidades' => $comunidades,
             'calles' => $calles,
+            'tipo_voto' => TipoVotoEnum::array(),
+            'hora_voto' => HoraVotoEnum::array(),
             'votos' => $votos,
             'centros_electorales' => $centros_electorales
         ]);
@@ -77,7 +84,11 @@ class VotoCalleController extends Controller
      */
     public function store(StoreVotoCalleRequest $request)
     {
-        //
+        $data = $request->validated();
+        
+        $voto = CreateVotoCalle::run($data);
+
+         return to_route('votos_calle.index',['calle'=>$voto->calle_id,'comunidad'=>$voto->calle->comunidad->id,'centro_electoral'=>$voto->calle->comunidad->centro_electoral->id,'municipio'=>$voto->calle->comunidad->centro_electoral->parroquia->municipio->id,'parroquia'=>$voto->calle->comunidad->centro_electoral->parroquia->id])->with('success','Voto Calle Registrado con Éxito');
     }
 
     /**
@@ -99,16 +110,22 @@ class VotoCalleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVotoCalleRequest $request, VotoCalle $votoCalle)
+    public function update(UpdateVotoCalleRequest $request, VotoCalle $votos_calle)
     {
-        //
+        $data = $request->validated();
+        $voto = UpdateVotoCalle::run($votos_calle,$data);
+
+         return to_route('votos_calle.index',['calle'=>$voto->calle_id,'comunidad'=>$voto->calle->comunidad->id,'centro_electoral'=>$voto->calle->comunidad->centro_electoral->id,'municipio'=>$voto->calle->comunidad->centro_electoral->parroquia->municipio->id,'parroquia'=>$voto->calle->comunidad->centro_electoral->parroquia->id])->with('success','Voto Calle Registrado con Éxito');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VotoCalle $votoCalle)
-    {
-        //
+    public function destroy(VotoCalle $votos_calle)
+    {   
+        $calle = $votos_calle->calle;
+        $votos_calle->delete();
+
+        return to_route('votos_calle.index',['calle'=>$calle->id,'comunidad'=>$calle->comunidad->id,'centro_electoral'=>$calle->comunidad->centro_electoral->id,'municipio'=>$calle->comunidad->centro_electoral->parroquia->municipio->id,'parroquia'=>$calle->comunidad->centro_electoral->parroquia->id])->with('success','Voto Calle Registrado con Éxito');
     }
 }
