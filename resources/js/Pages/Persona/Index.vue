@@ -116,7 +116,6 @@
   import mapValues from 'lodash/mapValues'
   import Pagination from '@/Components/Pagination.vue'
   import SearchFilter from '@/Components/SearchFilter.vue'
-  import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
 
   export default {
     components: {
@@ -124,10 +123,7 @@
       Icon,
       Link,
       Pagination,
-      SearchFilter,
-      Dropdown,
-      ListGroup,
-      ListGroupItem
+      SearchFilter
     },
     layout: Layout,
     props: {
