@@ -139,7 +139,7 @@ v-model="form.sexo"
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import SearchFilter from '@/Components/SearchFilter.vue'
   import throttle from 'lodash/throttle'
-  import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
+  
   import { Head, Link } from '@inertiajs/vue3'
 
   export default {
@@ -149,9 +149,6 @@ v-model="form.sexo"
       Link,
       Pagination,
       SearchFilter,
-      Dropdown,
-      ListGroup,
-      ListGroupItem,
       InputError,
       InputLabel,
       PrimaryButton
