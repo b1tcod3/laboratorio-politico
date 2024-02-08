@@ -4,34 +4,34 @@
     <h1 class="mb-8 text-3xl font-bold">Parroquias</h1>
     <div class="flex items-center justify-between mb-6">
 
-      <dropdown :text="form.rows+' rows'">
-        <list-group>
-          <list-group-item @click="updateRows(5)">
+      <FwbDropdown :text="form.rows+' rows'">
+        <FwbListGroup>
+          <FwbListGroupItem @click="updateRows(5)">
             <template #prefix >
 
             </template>
             5 rows
-          </list-group-item>
-          <list-group-item @click="updateRows(10)">
+          </FwbListGroupItem>
+          <FwbListGroupItem @click="updateRows(10)">
             <template #prefix>
 
             </template>
             10 rows
-          </list-group-item>
-          <list-group-item @click="updateRows(15)">
+          </FwbListGroupItem>
+          <FwbListGroupItem @click="updateRows(15)">
             <template #prefix >
 
             </template>
             15 rows
-          </list-group-item>
-          <list-group-item @click="updateRows(25)">
+          </FwbListGroupItem>
+          <FwbListGroupItem @click="updateRows(25)">
             <template #prefix >
 
             </template>
             25 rows
-          </list-group-item>
-        </list-group>
-      </dropdown>
+          </FwbListGroupItem>
+        </FwbListGroup>
+      </FwbDropdown>
 
   <select id="municipios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
   v-model="form.municipio" @change="form.eje=''"
@@ -161,7 +161,7 @@
   import mapValues from 'lodash/mapValues'
   import Pagination from '@/Components/Pagination.vue'
   import SearchFilter from '@/Components/SearchFilter.vue'
-  import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
+  import { FwbDropdown, FwbDropdownListGroup, FwbDropdownListGroupItem } from 'flowbite-vue'
 
   export default {
     components: {
