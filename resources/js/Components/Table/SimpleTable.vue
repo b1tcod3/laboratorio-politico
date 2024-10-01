@@ -1,4 +1,4 @@
-<script setup>
+0<script setup>
     import { onMounted } from 'vue';
     import { Link } from '@inertiajs/vue3';
     import icon from '@/Components/Icon/Icon.vue'
@@ -69,6 +69,14 @@
         return str
     }
     const table = new simpleDatatables.DataTable('#'+props.name, {
+
+        labels: {
+            placeholder: "Buscar ...",
+            perPage: "entradas por página",
+            noRows: "No existe registros",
+            noResults: "No hay registros de lo que estas buscando",
+
+        },
         template: (options, dom) => "<div class='" + options.classes.top + "'>" +
         "<div class='flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-3 rtl:space-x-reverse w-full sm:w-auto'>" +
         (options.paging && options.perPageSelect ?
