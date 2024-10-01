@@ -1,0 +1,29 @@
+progress {
+  @apply h-3 rounded-full overflow-hidden;
+}
+
+progress::-webkit-progress-bar {
+  @apply bg-gray-200;
+}
+
+progress::-webkit-progress-value {
+  @apply bg-blue-500;
+}
+
+progress::-moz-progress-bar {
+  @apply bg-blue-500;
+}
+
+progress::-ms-fill {
+  @apply bg-blue-500 border-0;
+}
+
+#inertia-progress {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 20px;
+  z-index: 9999;
+}

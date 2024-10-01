@@ -1,0 +1,28 @@
+/* Reset */
+@import 'tailwindcss/base';
+@import 'reset';
+
+/* Components */
+@import 'tailwindcss/components';
+@import 'buttons';
+
+
+/* Utilities */
+@import 'tailwindcss/utilities';
+@import "navbar.css";
+@import "app.css";
+@import "aside.css";
+@import "title-bar.css";
+@import "button.css";
+@import "hero.css";
+@import "card.css";
+@import "icon.css";
+@import "table.css";
+@import "progress.css";
+@import "image.css";
+@import "modal.css";
+@import "notifications.css";
+@import "form/checkbox-radio-switch.css";
+@import "form/form.css";
+@import "footer.css";
+@import 'form';
