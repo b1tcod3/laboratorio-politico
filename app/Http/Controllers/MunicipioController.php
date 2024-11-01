@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Actions\Municipio\GetMunicipios;
@@ -12,40 +11,41 @@ use Inertia\Inertia;
 class MunicipioController extends Controller
 {
     public function index()
-    {   
-        $numberRows = Request::input('numberRows')??10;
-        $filters = Request::all('search','eje');
-        $dataSort = Request::all('columnSort','typeSort');
+    {
+        $numberRows = Request::input('numberRows') ?? 10;
+        $filters    = Request::all('search', 'eje');
+        $dataSort   = Request::all('columnSort', 'typeSort');
 
-        $municipios = GetMunicipios::run($dataSort, $filters,$numberRows);
+        $municipios = GetMunicipios::run($dataSort, $filters, $numberRows);
 
         $municipios->appends(Request::all());
 
         return Inertia::render('Municipio/Index', [
             'municipios' => $municipios,
             'numberRows' => $numberRows,
-            'dataSort' => $dataSort,
-            'filters' => $filters,
-            'ejes' => EjeEnum::array()
+            'dataSort'   => $dataSort,
+            'filters'    => $filters,
+            'ejes'       => EjeEnum::toArray(),
         ]);
     }
 
-    public function show(Municipio $municipio){
+    public function show(Municipio $municipio)
+    {
 
         $data_municipio = [
-            'eje' => $municipio->eje()
-            ];
+            'eje' => $municipio->eje(),
+        ];
 
         $parroquias = GetParroquiasCollection::run(
-            ['nombre','asc'],
-            ['municipio' =>$municipio->id ],
+            ['nombre', 'asc'],
+            ['municipio_id' => $municipio->id],
             10
         );
 
         return Inertia::render('Municipio/Show', [
-            'municipio' => $municipio,
-            'data' => $data_municipio,
-            'parroquias' => $parroquias
+            'municipio'  => $municipio,
+            'data'       => $data_municipio,
+            'parroquias' => $parroquias,
         ]);
     }
 }

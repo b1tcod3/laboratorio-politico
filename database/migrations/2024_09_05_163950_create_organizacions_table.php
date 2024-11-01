@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('organizaciones', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre',50);
-            $table->string('logo',150);
-            $table->string('acronimo',15);
+            $table->string('nombre', 50);
+            $table->string('logo', 150);
+            $table->string('acronimo', 15);
             $table->unsignedTinyInteger('tipo');
             $table->timestamps();
         });

@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->foreign('centro_electoral_id')->references('id')->on('centro_electorals');
 
-            $table->unique(['tipo','centro_electoral_id']);
+            $table->unique(['tipo', 'centro_electoral_id']);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_centro_electorals');
+        Schema::dropIfExists('data_centro_electorales');
     }
 };

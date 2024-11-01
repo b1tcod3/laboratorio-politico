@@ -69,6 +69,10 @@
     <tr v-for="centro_electoral in centros_electorales">
       <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{centro_electoral.id}}</td>
       <td>{{centro_electoral.nombre}}</td>
+      <td>{{Number(centro_electoral.sum_electores)}}</td>
+      <td><Link :href="route('centros-electorales.show',{centro_electoral:centro_electoral.id})">
+        <Icon name="eye"/>
+      </Link></td>
     </tr>
   </template>
 </container-table>

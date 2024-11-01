@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,30 +19,30 @@ class Parroquia extends Model
     }
 
     public function scopeFilter($query, array $filters)
-    {   
+    {
         $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->where('parroquias.nombre', 'like', '%'.$search.'%');
+            $query->where('parroquias.nombre', 'like', '%' . $search . '%');
         });
 
         $query->when($filters['municipio_id'] ?? null, function ($query, $municipio) {
-            $query->where('parroquias.municipio_id',$municipio);
+            $query->where('parroquias.municipio_id', $municipio);
         });
-        
+
         $query->when($filters['eje'] ?? null, function ($query, $eje) {
-                $query->having('eje',$eje);
+            $query->having('eje', $eje);
         });
 
         $query->when($filters['municipio'] ?? null, function ($query, $municipio) {
-            $query->where('municipios.nombre', 'like', '%'.$municipio.'%');
+            $query->where('nombre_municipio', 'like', '%' . $municipio . '%');
         });
     }
 
     public function scopeSort($query, array $sortData)
-    {   
-        if($sortData){
-            $query->orderBy($sortData['columnSort']??'nombre', $sortData['typeSort']??'asc');
-        }else{
-            $query->orderBy('nombre','asc');
+    {
+        if ($sortData) {
+            $query->orderBy($sortData['columnSort'] ?? 'nombre', $sortData['typeSort'] ?? 'asc');
+        } else {
+            $query->orderBy('nombre', 'asc');
         }
     }
 

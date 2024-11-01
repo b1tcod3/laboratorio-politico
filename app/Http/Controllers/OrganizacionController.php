@@ -1,49 +1,48 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Enums\NivelEstructuraEnum;
+use App\Enums\TipoOrganizacionEnum;
 use App\Http\Requests\Organizacion\StoreOrganizacionRequest;
 use App\Http\Requests\Organizacion\UpdateOrganizacionRequest;
 use App\Models\Organizacion;
-use Illuminate\Http\Request;
+use ErlandMuchasaj\LaravelFileUploader\FileUploader;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Inertia\Inertia;
-use App\Enums\TipoOrganizacionEnum;
-use ErlandMuchasaj\LaravelFileUploader\FileUploader; 
 use Illuminate\Validation\Rules\File;
-use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class OrganizacionController extends Controller implements HasMiddleware
-{   
-     /**
+{
+    /**
      * Get the middleware that should be assigned to the controller.
      */
     public static function middleware(): array
     {
         return [
             'auth',
-            new Middleware(HandlePrecognitiveRequests::class, only: ['store','update']),
+            new Middleware(HandlePrecognitiveRequests::class, only: ['store', 'update']),
         ];
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $organizaciones = Organizacion::orderBy('nombre')
-                            ->get()
-                            ->transform(fn($organizacion) =>
-                                ['id' => $organizacion->id,
-                                'nombre' => $organizacion->nombre,
-                                'logo' => $organizacion->logo,
-                                'tipo' => TipoOrganizacionEnum::from($organizacion->tipo)->name,
-                                ] 
-                            );
+            ->get()
+            ->transform(fn($organizacion) =>
+                ['id'    => $organizacion->id,
+                    'nombre' => $organizacion->nombre,
+                    'logo'   => $organizacion->logo,
+                    'tipo'   => str_replace('_', ' ', TipoOrganizacionEnum::from($organizacion->tipo)->name),
+                ]
+            );
 
-        return Inertia::render('Organizacion/Index',[
-             'organizaciones' => $organizaciones
+        return Inertia::render('Organizacion/Index', [
+            'organizaciones' => $organizaciones,
         ]
         );
     }
@@ -52,9 +51,9 @@ class OrganizacionController extends Controller implements HasMiddleware
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
-        return Inertia::render('Organizacion/Create',[
-             'tipos' => TipoOrganizacionEnum::array(),
+    {
+        return Inertia::render('Organizacion/Create', [
+            'tipos' => TipoOrganizacionEnum::toArray(),
         ]
         );
     }
@@ -63,7 +62,7 @@ class OrganizacionController extends Controller implements HasMiddleware
      * Store a newly created resource in storage.
      */
     public function store(StoreOrganizacionRequest $request)
-    {   
+    {
         $input = $request->validated();
 
         $file = $input['logo'];
@@ -81,9 +80,11 @@ class OrganizacionController extends Controller implements HasMiddleware
      * Display the specified resource.
      */
     public function show(Organizacion $organizacione)
-    {   
-        return Inertia::render('Organizacion/Show',[
-             'organizacion' => $organizacione
+    {
+        return Inertia::render('Organizacion/Show', [
+            'organizacion'       => $organizacione,
+            'niveles_estructura' => NivelEstructuraEnum::toArray(),
+            'estructuras'        => $organizacione->estructuras,
         ]
         );
     }
@@ -92,10 +93,10 @@ class OrganizacionController extends Controller implements HasMiddleware
      * Show the form for editing the specified resource.
      */
     public function edit(Organizacion $organizacione)
-    {   
-        return Inertia::render('Organizacion/Edit',[
-             'tipos' => TipoOrganizacionEnum::array(),
-             'organizacion' => $organizacione
+    {
+        return Inertia::render('Organizacion/Edit', [
+            'tipos'        => TipoOrganizacionEnum::toArray(),
+            'organizacion' => $organizacione,
         ]
         );
     }
@@ -122,18 +123,18 @@ class OrganizacionController extends Controller implements HasMiddleware
         return redirect('/organizaciones')->with('success', 'Organización Elimanada con éxito!');
     }
 
-     /**
+    /**
      * Remove the specified resource from storage.
      */
     public function updateLogo(Request $request, Organizacion $organizacione)
-    {   
+    {
 
         $extensions = implode(',', FileUploader::images());
 
         $validated = $request->validate([
-            'logo' => ['required',File::image()->max( 2 * 1000),
-                 'mimes:' . $extensions,
-                ],
+            'logo' => ['required', File::image()->max(2 * 1000),
+                'mimes:' . $extensions,
+            ],
         ]);
 
         $file = $validated['logo'];

@@ -1,7 +1,7 @@
 <script setup>
 	import Layout from '@/Layouts/MainLayout.vue';
 	import { Head, Link } from '@inertiajs/vue3';
-    import SimpleTable from '@/Components/Table/SimpleTable.vue';
+    import SimpleTable from '@/Components/Table/CRUDSimpleTable.vue';
 
     defineOptions({ layout: Layout });
 

@@ -36,6 +36,9 @@
     },
     centros_electorales: {
       type: Array
+    },
+    comunidades: {
+      type: Array
     }
   });
 
@@ -44,9 +47,10 @@
       columnSort: props.dataSort.columnSort,
       typeSort: props.dataSort.typeSort,
       search: props.filters.search,
-      eje: props.filters.eje??'',
+      municipio_eje: props.filters.municipio_eje??'',
       municipio: props.filters.municipio,
-      parroquia: props.filters.parroquia
+      parroquia: props.filters.parroquia,
+      centro_electoral: props.filters.centro_electoral
   });
 
   watch(
@@ -61,7 +65,7 @@
 
   const updateTable = () => {
       loading.value = true;
-      form.get(route('centros-electorales.index'), pickBy(form), { preserveState: true,
+      form.get(route('comunidades.index'), pickBy(form), { preserveState: true,
           onFinish: () => {
             loading.value=false;
           }
@@ -98,9 +102,9 @@
 </script>
 
 <template>
-  <Head title="Centros Electorales" />
+  <Head title="Comunidades" />
 
-  <container-table name="Centros Electorales" :links="centros_electorales" :isEmpty="centros_electorales.data.length===0">
+  <container-table name="Comunidades" :links="comunidades" :isEmpty="comunidades.data.length===0">
   <template #widget>
     <dropdown-radio-button 
         v-model="form.numberRows"
@@ -113,7 +117,7 @@
     <div class="grid gap-4 sm:grid-cols-3 sm:gap-6 mx-4">
 
       <div>
-                  <select id="eje" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" v-model="form.eje" @change="form.municipio='';updateTable();">
+                  <select id="eje" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" v-model="form.municipio_eje" @change="form.municipio='';updateTable();">
                       <option value="">Selecciona Eje</option>
                       <option :value="id" v-for="(eje,id) in ejes">{{eje}}</option>
                   </select>
@@ -153,7 +157,7 @@
 
   <template #columns>
     <th scope="col" class="px-6 py-3"
-    v-for="column in columnsTable.columns_centro_electoral"
+    v-for="column in columnsTable.columns_comunidades"
     >
       <sorted-column @clickColumn="sortColumn" 
     :column="column" :active="form.columnSort==column.id"/>
@@ -167,22 +171,25 @@
   <template #body>
     <tbody v-show="!loading">
             
-            <tr v-for="centro in centros_electorales.data" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr v-for="comunidad in comunidades.data" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4">
-                    {{centro.id}}
+                    {{comunidad.id}}
                 </td>
                 <td class="px-6 py-4">
-                    {{centro.eje}}
+                    {{comunidad.eje}}
                 </td>
                 <td class="px-6 py-4">
-                    {{centro.nombre_municipio}}
+                    {{comunidad.municipio_nombre}}
                 </td>
                 <td class="px-6 py-4">
-                    {{centro.nombre}}
+                    {{comunidad.centro_electoral_nombre}}
                 </td>
-                
                 <td class="px-6 py-4">
-                    <Link :href="route('parroquias.show',{parroquia:centro})" type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">Ver</Link>
+                    {{comunidad.comunidad_nombre}}
+                </td>
+                <td></td>
+                <td class="px-6 py-4">
+                    <Link :href="route('comunidades.show',{comunidad:comunidad.id})" type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">Ver</Link>
 
                 </td>
             </tr>

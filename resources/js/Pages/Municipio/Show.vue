@@ -68,10 +68,13 @@
   <template #rows>
     <tr v-for="parroquia in parroquias">
       <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{parroquia.id}}</td>
-      <td>{{parroquia.eje}}</td>
-      <td>{{parroquia.nombre}}</td>
+      <td>{{data.eje}}</td>
+      <td>{{municipio.nombre}}</td>
       <td>{{parroquia.nombre}}</td>
       <td>{{parroquia.centros_electorales_count}}</td>
+      <td><Link :href="route('parroquias.show',{parroquia:parroquia.id})">
+        <Icon name="eye"/>
+      </Link></td>
     </tr>
   </template>
 </container-table>
